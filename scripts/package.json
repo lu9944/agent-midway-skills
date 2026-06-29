@@ -4,12 +4,12 @@
   "type": "module",
   "description": "Build scripts for Midway Best Practices skillset",
   "scripts": {
-    "build": "npx ts-node build-agents.ts",
-    "build:watch": "npx nodemon --watch ../rules --ext md --exec 'npx ts-node build-agents.ts'"
+    "build": "npx tsx build-agents.ts",
+    "build:watch": "npx nodemon --watch ../rules --ext md --exec 'npx tsx build-agents.ts'"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
-    "ts-node": "^10.9.0",
+    "tsx": "^4.0.0",
     "@types/node": "^20.0.0"
   }
 }

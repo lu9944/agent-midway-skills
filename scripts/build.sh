@@ -8,8 +8,8 @@ cd "$SCRIPT_DIR"
 
 # Check if ts-node is available
 if command -v npx &> /dev/null; then
-    echo "Running build with ts-node..."
-    npx ts-node build-agents.ts
+    echo "Running build with tsx..."
+    npx tsx build-agents.ts
 else
     echo "Error: npx not found. Please install Node.js."
     exit 1
