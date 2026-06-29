@@ -1,4 +1,4 @@
-name: Validate Build
+name: Validate Skill
 
 on:
   push:
@@ -7,30 +7,43 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: scripts/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: scripts
-
-      - name: Build AGENTS.md
-        run: npm run build
-        working-directory: scripts
-
-      - name: Verify AGENTS.md is up to date
+      - name: Validate SKILL.md frontmatter
         run: |
-          if ! git diff --exit-code AGENTS.md; then
-            echo "::error::AGENTS.md is out of date. Run 'npm run build' in scripts/ and commit the result."
+          if ! head -1 SKILL.md | grep -q '^---'; then
+            echo "::error::SKILL.md must start with YAML frontmatter"
             exit 1
           fi
+          echo "SKILL.md frontmatter OK"
+
+      - name: Validate required frontmatter fields
+        run: |
+          for field in name description; do
+            if ! grep -q "^${field}:" SKILL.md; then
+              echo "::error::SKILL.md missing required field: ${field}"
+              exit 1
+            fi
+          done
+          echo "Required fields OK"
+
+      - name: Validate reference files exist
+        run: |
+          COUNT=$(find references -name '*.md' ! -name '_*' | wc -l)
+          echo "Found ${COUNT} reference rule files"
+          if [ "$COUNT" -lt 70 ]; then
+            echo "::error::Expected at least 70 rule files, found ${COUNT}"
+            exit 1
+          fi
+
+      - name: Validate no orphan AGENTS.md
+        run: |
+          if [ -f AGENTS.md ]; then
+            echo "::error::AGENTS.md should not exist in index-based skill design"
+            exit 1
+          fi
+          echo "No monolithic AGENTS.md (correct)"
