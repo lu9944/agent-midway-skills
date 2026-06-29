@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "organization": "Midway Best Practices",
+  "date": "June 2026",
+  "abstract": "Comprehensive best practices and architecture guide for Midway.js v4 applications, designed for AI agents and LLMs. Contains 78 rules across 10 categories, prioritized by impact from critical (architecture, dependency injection) to incremental (DevOps patterns). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and v4-specific guidance to reduce magic variables and write compliant Midway code.",
+  "references": [
+    "https://midwayjs.org",
+    "https://github.com/midwayjs/midway",
+    "https://github.com/cool-team-official/cool-admin-midway",
+    "https://www.midwayjs.org/docs/upgrade_v4",
+    "https://www.midwayjs.org/docs/container"
+  ]
+}
