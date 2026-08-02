@@ -50,6 +50,15 @@ agent-midway-skills/
 └── .github/workflows/    # CI validation
 ```
 
+### Notable rules
+
+| Rule file | What it covers |
+|-----------|----------------|
+| `references/micro-websocket.md` | WebSocket push: `@midwayjs/socketio` vs `@midwayjs/ws` selection, `@WSController`/`@OnWSMessage`/`@WSEmit`/`@WSBroadCast`, heartbeats, testing |
+| `references/db-leoric.md` | Leoric ORM: datasource config form, `@InjectModel`, active-record Model queries |
+| `references/devops-one-shot.md` | One-time scripts with `@midwayjs/one-shot`: `onServerReady` vs `OneShotRunner`/`framework.runScript` |
+| `references/devops-skill-midway.md` | Official `@midwayjs/skill-midway` bundle: `midway-skill install`, local docs/API/changelog queries |
+
 ## How It Works
 
 This skill follows the **progressive disclosure** pattern defined by the [Agent Skills specification](https://agentskills.io/specification):
