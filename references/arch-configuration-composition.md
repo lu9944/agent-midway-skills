@@ -29,7 +29,7 @@ export class MainConfiguration {}
 
 ```typescript
 // src/configuration.ts
-import { Configuration, App, CommonJSFileDetector } from '@midwayjs/core';
+import { Configuration, MainApp, CommonJSFileDetector } from '@midwayjs/core';
 import { ILifeCycle, IMidwayContainer, IMidwayApplication } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as orm from '@midwayjs/typeorm';
@@ -43,8 +43,11 @@ import LocalConfig from './config/config.local';
     koa,          // web server framework
     orm,          // typeorm (each is a namespace object)
     validation,   // v4 validation component
-    // environment-gated component (only loaded in dev/prod)
-    // { component: require('@midwayjs/info'), enabledEnvironment: ['local'] },
+    // environment-gated component — only loaded in dev/prod (real pattern from cool-admin-midway)
+    {
+      component: info,                    // import * as info from '@midwayjs/info'
+      enabledEnvironment: ['local', 'prod'],
+    },
   ],
   // v4: explicit file detector replaces implicit auto-scan
   detector: new CommonJSFileDetector({
@@ -59,7 +62,7 @@ import LocalConfig from './config/config.local';
   ],
 })
 export class MainConfiguration implements ILifeCycle {
-  @App() app: IMidwayApplication;
+  @MainApp() app: IMidwayApplication;   // v4: @MainApp() replaces the empty @App() form
 
   async onReady(container: IMidwayContainer, app: IMidwayApplication) {
     // container is ready; register global middleware/guards/filters here
@@ -69,6 +72,9 @@ export class MainConfiguration implements ILifeCycle {
     // cleanup resources
   }
 }
+```
+
+**Environment-gated components (`@midwayjs/info`):** import the `@midwayjs/info` component with an `enabledEnvironment` list to expose its inspection endpoint (default path `/_info`, configurable via `info.infoPath`; shows package versions, modules, and env) only where you actually need it — e.g. `['local', 'prod']` in cool-admin-midway. Gating avoids exposing version/module internals in staging. The same object form applies to any component: `{ component: someComp, enabledEnvironment: [...] }`.
 ```
 
 Reference: [Midway Component Development](https://midwayjs.org/docs/component_development), [v4 Upgrade Guide](https://midwayjs.org/docs/upgrade_v4)

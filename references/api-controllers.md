@@ -7,7 +7,7 @@ tags: api, controller, routing, decorators
 
 ## Write Controllers with Declarative Routing and Param Decorators
 
-Use `@Controller(prefix?)` to group routes, HTTP-method decorators (`@Get`, `@Post`, `@Del`, ...) to bind paths, and parameter decorators (`@Body`, `@Query`, `@Param`, `@Headers`, `@Session`) to extract typed request data. Compose multiple param decorators on one handler. Use `@SetHeader`, `@HttpCode`, `@ContentType` for response shaping, and `{ summary: '...' }` in route options for Swagger. Delegate business logic to injected services — controllers should stay thin.
+Use `@Controller(prefix?)` to group routes, HTTP-method decorators (`@Get`, `@Post`, `@Del`, ...) to bind paths, and parameter decorators (`@Body`, `@Query`, `@Param`, `@Headers`, `@Session`) to extract typed request data. Compose multiple param decorators on one handler. Use `@SetHeader`, `@HttpCode`, `@ContentType` for response shaping, and `@ApiOperation({ summary, description })` from `@midwayjs/swagger` for Swagger docs — the route-option form `{ summary: '...' }` is **deprecated in v4** (swagger reads `@ApiOperation` metadata first). Delegate business logic to injected services — controllers should stay thin.
 
 **Incorrect (manual ctx parsing, manual response writing, fat controller):**
 
@@ -40,7 +40,8 @@ import { CreateUserDTO } from '../dto/user.dto';
 export class UserController {
   @Inject() userService: UserService;
 
-  // compose multiple param decorators; { summary } for swagger docs
+  // compose multiple param decorators; use @ApiOperation for swagger docs
+  // (route option { summary } is deprecated in v4)
   @Get('/')
   async findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,

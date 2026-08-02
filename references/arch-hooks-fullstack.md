@@ -1,15 +1,15 @@
 ---
-title: Build Fullstack Apps with Midway Hooks
-impact: MEDIUM
-impactDescription: "Zero-API RPC with React/Vue + type-safe backend"
-tags: architecture, hooks, fullstack, react, vue, rpc, zero-api
+title: Midway Hooks Is Deprecated — Use the Functional API Instead
+impact: MEDIUM-HIGH
+impactDescription: "Hooks 3.x unmaintained since 2023; v4 fullstack = Functional API"
+tags: architecture, hooks, fullstack, react, vue, rpc, deprecated, migration
 ---
 
-## Build Fullstack Apps with Midway Hooks
+## Midway Hooks Is Deprecated — Use the Functional API Instead
 
-Midway Hooks (`@midwayjs/hooks` + `@midwayjs/hooks-kit`) is the function-style fullstack framework: a single codebase contains frontend (React/Vue) and Node.js backend. Backend API functions are imported and called directly on the frontend — the toolkit compiles this into an HTTP RPC call (`{ args: [...] }` wire format) with shared TypeScript types. Define APIs via `Api(Get(), async () => ...)` operators; use `useContext()` for request context. Validate with zod via `Validate(...)`. Use `hooks dev`/`hooks build`/`hooks start`.
+> **⚠️ DEPRECATED:** `@midwayjs/hooks` / `@midwayjs/hooks-kit` are in maintenance mode — the last release (3.1.6) was published **2023-03**, and the official docs carry a caution that the fullstack ("一体化") solution will be gradually discontinued. **Do not start new projects on Hooks.** The v4 replacement is the **Functional API** (`defineApi` + zod + typed client) — see `references/arch-functional-api.md` for the current pattern. The material below documents legacy Hooks code for migrating existing apps.
 
-> **Note:** The docs carry a deprecation caution — existing fullstack projects may continue, but evaluate carefully for new projects.
+Midway Hooks was the function-style fullstack framework of the v3 era: a single codebase contains frontend (React/Vue) and Node.js backend. Backend API functions are imported and called directly on the frontend — the toolkit compiles this into an HTTP RPC call (`{ args: [...] }` wire format) with shared TypeScript types. Define APIs via `Api(Get(), async () => ...)` operators; use `useContext()` for request context. Validate with zod via `Validate(...)`. Use `hooks dev`/`hooks build`/`hooks start`.
 
 **Incorrect (writing separate API client + fetch calls, no shared types):**
 

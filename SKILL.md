@@ -4,7 +4,7 @@ description: >
   Midway.js v4 best practices and architecture patterns for building production-ready
   applications. Use when writing, reviewing, or refactoring Midway code: configuration
   composition, dependency injection, scopes, validation, error handling, TypeORM v4,
-  microservices, FaaS/Serverless, security, testing, and deployment. 78 rules across
+  microservices, FaaS/Serverless, security, testing, and deployment. 82 rules across
   10 categories, each in a separate reference file loaded on demand.
 license: MIT
 compatibility: Designed for opencode, Claude Code, Codex, Cursor, and any agent supporting the Agent Skills standard
@@ -12,13 +12,13 @@ metadata:
   author: agent-midway-skills
   version: "1.0.0"
   midway-version: "v4.2.1"
-  rule-count: "78"
+  rule-count: "82"
 ---
 
 # Midway.js v4 Best Practices
 
 Comprehensive best-practice skill for **Midway.js v4** (tested against **v4.2.1**).
-78 rules across 10 categories, each in its own reference file under `references/`.
+82 rules across 10 categories, each in its own reference file under `references/`.
 
 Load only the rules relevant to your task — each file is self-contained with
 incorrect vs. correct examples and v4-specific guidance.
@@ -29,8 +29,8 @@ incorrect vs. correct examples and v4-specific guidance.
 - Composing `@Configuration` and wiring components
 - Implementing authentication (guards, JWT, passport) or input validation
 - Using the IoC container (scopes, injection identifiers, circular dependencies)
-- Working with TypeORM / Sequelize / Redis / MongoDB / MikroORM / Prisma
-- Building microservices (gRPC, RabbitMQ, Kafka, MQTT), events, or task queues
+- Working with TypeORM / Sequelize / Redis / MongoDB / MikroORM / Leoric / Prisma
+- Building microservices (gRPC, RabbitMQ, Kafka, MQTT), events, task queues, or WebSocket push
 - Handling file uploads, i18n, Swagger docs, or GraphQL
 - Deploying FaaS functions to Aliyun FC or AWS Lambda
 - Reviewing or refactoring existing Midway codebases
@@ -129,6 +129,7 @@ When a task matches, load the corresponding reference file via `Read references/
 | Sequelize v4 (`@Table` replaces `@BaseTable`) | `references/db-sequelize.md` |
 | MongoDB with Typegoose/Mongoose | `references/db-mongodb.md` |
 | MikroORM v6/v7 | `references/db-mikro.md` |
+| Leoric ORM (lightweight Model API) | `references/db-leoric.md` |
 | Object storage (COS/OSS/TableStore) | `references/db-object-storage.md` |
 | Prisma ORM | `references/db-prisma.md` |
 
@@ -163,6 +164,7 @@ When a task matches, load the corresponding reference file via `Read references/
 | Scheduled tasks with `@midwayjs/cron` | `references/micro-cron.md` |
 | Microservice provider/consumer pattern | `references/micro-provider-consumer.md` |
 | MQTT for IoT | `references/micro-mqtt.md` |
+| WebSocket (socket.io vs ws) | `references/micro-websocket.md` |
 | MCP servers with `@midwayjs/mcp` | `references/micro-mcp.md` |
 
 ### DevOps & deployment
@@ -180,6 +182,8 @@ When a task matches, load the corresponding reference file via `Read references/
 | FaaS deployment (Aliyun FC / AWS Lambda) | `references/devops-faas-deployment.md` |
 | Distributed tracing (OpenTelemetry) | `references/devops-tracing.md` |
 | Midway toolchain (mwtsc, mwts) | `references/devops-cli-tools.md` |
+| One-time scripts with `@midwayjs/one-shot` | `references/devops-one-shot.md` |
+| Official skill bundle (`@midwayjs/skill-midway`) | `references/devops-skill-midway.md` |
 
 ### Advanced architecture
 
@@ -188,7 +192,7 @@ When a task matches, load the corresponding reference file via `Read references/
 | Building reusable components/frameworks | `references/arch-component-development.md` |
 | FaaS functions with `@ServerlessTrigger` | `references/arch-faas-functions.md` |
 | Functional API (declarative routes) | `references/arch-functional-api.md` |
-| Fullstack with Midway Hooks | `references/arch-hooks-fullstack.md` |
+| Fullstack with Midway Hooks (⚠️ deprecated → use Functional API) | `references/arch-hooks-fullstack.md` |
 | Extending Context with typed properties | `references/arch-context-extension.md` |
 | Custom decorators (DecoratorManager) | `references/arch-custom-decorator.md` |
 | ServiceFactory for multi-instance services | `references/arch-service-factory.md` |

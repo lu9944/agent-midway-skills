@@ -73,4 +73,28 @@ export class UserController {
 
 For cascading/nested DTOs, use the arrow-function form because the validator isn't registered at class-eval time: `@Rule(() => getSchema(AddressDTO).required())`. Validation failures throw `MidwayValidationError` — catch it with a `@Catch(MidwayValidationError)` filter.
 
+### Pluggable validator adapters (v4)
+
+The component registers **one validator adapter at a time** via `validation.validators` — v4 ships `@midwayjs/validation-joi`, `@midwayjs/validation-zod`, `@midwayjs/validation-zod4`, and `@midwayjs/validation-class-validator`. The adapter defines which schema API `@Rule(...)` accepts and owns error formatting (e.g. the zod4 adapter formats messages through `zod-validation-error` + `@midwayjs/i18n`, so locale-aware error text follows the i18n config). Pick one per app — `defaultValidator` is inferred from the registered adapter; do not register two for the same `@Rule` syntax.
+
+```typescript
+// config.default.ts — joi adapter (v3-like syntax)
+import joi from '@midwayjs/validation-joi';
+export default {
+  validation: {
+    validators: { joi },
+    // defaultValidator: 'joi',   // optional; first registered becomes default
+  },
+} as MidwayConfig;
+
+// config.default.ts — zod4 adapter (native z.* schemas, i18n error messages)
+import zod4 from '@midwayjs/validation-zod4';
+export default {
+  validation: { validators: { zod4 } },
+  i18n: { defaultLocale: 'zh-CN' },   // error messages follow locale via zod-i18n-map
+} as MidwayConfig;
+```
+
+Matching `@Rule` usage: joi → `@Rule(Joi.string().required())`; zod4 → `@Rule(z.string().min(1))` with `import { z } from 'zod'`; class-validator → `@Rule(IsString() as any)`. Functional-API validation (`input({ body: z.object(...) })`) is zod-native and independent of this adapter choice.
+
 Reference: [Midway Validation (v4)](https://midwayjs.org/docs/extensions/validation)

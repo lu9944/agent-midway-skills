@@ -33,7 +33,7 @@ npx skills add lu9944/agent-midway-skills -a claude-code -a cursor
 ```
 agent-midway-skills/
 ├── SKILL.md              # Index: frontmatter + decision guide + rule catalog
-├── references/           # 78 rule files (loaded on demand)
+├── references/           # 82 rule files (loaded on demand)
 │   ├── arch-*.md         # Architecture (CRITICAL)
 │   ├── di-*.md           # Dependency Injection (CRITICAL)
 │   ├── error-*.md        # Error Handling (HIGH)

@@ -1,13 +1,15 @@
 ---
-title: Use Prisma ORM in Fullstack Projects
+title: Use Prisma ORM (Schema-First, with Functional API)
 impact: MEDIUM
 impactDescription: "Schema-first ORM with generated typed client"
-tags: database, prisma, orm, hooks, fullstack, type-safe
+tags: database, prisma, orm, functional, fullstack, type-safe
 ---
 
-## Use Prisma ORM in Fullstack Projects
+## Use Prisma ORM (Schema-First, with Functional API)
 
-Prisma is the recommended ORM for Midway Hooks fullstack projects — it provides a schema-first workflow (`schema.prisma`), a generated fully-typed client (`@prisma/client`), and end-to-end type safety when combined with the Hooks zero-API RPC. Initialize the client as a module-level singleton in `src/api/prisma.ts`, then use it directly inside `Api()` handlers — no DI decorator needed. Set the engine mirror for poor-network regions.
+Prisma fits Midway **Functional API** (`defineApi`) fullstack projects — it provides a schema-first workflow (`schema.prisma`), a generated fully-typed client (`@prisma/client`), and end-to-end type safety when combined with typed API contracts. Initialize the client as a module-level singleton, then use it directly inside `defineApi` handlers (or via `useInject` for IoC-managed usage) — no Midway component wrapper exists (there is no `@midwayjs/prisma` package). Set the engine mirror for poor-network regions.
+
+> **Note:** earlier docs tied Prisma to Midway Hooks (`@midwayjs/hooks`); that stack is deprecated (see `arch-hooks-fullstack.md`). Use the Functional API instead.
 
 **Incorrect (untyped queries, manual SQL, no schema):**
 
@@ -34,33 +36,34 @@ model User {
 ```
 
 ```typescript
-// src/api/prisma.ts — singleton client (module-level, no DI needed)
+// src/api/prisma.ts — singleton client (module-level)
 import { PrismaClient } from '@prisma/client';
 export const prisma = new PrismaClient();
 
-// src/api/user.ts — use in Hooks API handlers with Validate
-import { Api, Get, Post, Validate } from '@midwayjs/hooks';
+// src/server/api/user.api.ts — use inside a Functional API handler with zod
+import { defineApi } from '@midwayjs/core/functional';
 import { z } from 'zod';
 import { prisma } from './prisma';
 
-export default Api(Get(), async () => {
-  return prisma.post.findMany({
-    where: { published: true },
-    include: { author: true },   // ✓ fully typed relation
-  });
-});
+export const userApi = defineApi('/users', (api) => ({
+  list: api
+    .get('/')
+    .output(z.array(z.object({ id: z.number(), name: z.string().nullable() })))
+    .handle(async () => {
+      return prisma.user.findMany({});   // ✓ fully typed result
+    }),
 
-export const signUp = Api(
-  Post(),
-  Validate(z.string(), z.string().email()),   // positional zod validation
-  async (name: string, email: string) => {
-    return prisma.user.create({ data: { name, email } });
-  },
-);
+  signUp: api
+    .post('/')
+    .input({ body: z.object({ name: z.string(), email: z.string().email() }) })
+    .handle(async ({ input }) => {
+      return prisma.user.create({ data: input.body });
+    }),
+}));
 
-// frontend: typed zero-API call
-// import { signUp } from '../api/user';
-// const user = await signUp('John', 'test@test.com');  // fully typed
+// frontend: typed call via createClient
+// import { api } from '../client';
+// const user = await api.user.signUp({ body: { name: 'John', email: 't@t.com' } });
 ```
 
 For poor network, set the engine mirror before install:
@@ -68,6 +71,6 @@ For poor network, set the engine mirror before install:
 PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma/
 ```
 
-Prisma works best in the Hooks/functional fullstack context. For class-based standard projects, prefer TypeORM/Sequelize/MikroORM (which have dedicated Midway component wrappers).
+Prisma works best in the Functional-API/typed fullstack context. For class-based standard projects, prefer TypeORM/Sequelize/MikroORM/Leoric (which have dedicated Midway component wrappers).
 
 Reference: [Midway Hooks + Prisma](https://midwayjs.org/docs/hooks/prisma), [Prisma Docs](https://www.prisma.io/)

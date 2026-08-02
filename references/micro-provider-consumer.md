@@ -86,6 +86,8 @@ export class OrderProducer {
 }
 ```
 
+> **Kafka ctx fields:** `ctx.topic` / `ctx.partition` / `ctx.message` / `ctx.commitOffsets()` on the kafka `Context` are **deprecated** in v4 — read from `ctx.payload` (the `EachMessagePayload`) instead, and commit offsets via `ctx.consumer.commitOffsets(...)`.
+
 WebSocket: `@WSController(namespace)` + `@OnWSMessage`/`@WSEmit` (socket.io) or `@WSController()` + `@OnWSMessage`/`@WSBroadCast` (ws).
 
 Reference: [Midway gRPC](https://midwayjs.org/docs/extensions/grpc), [RabbitMQ](https://midwayjs.org/docs/extensions/rabbitmq), [Kafka](https://midwayjs.org/docs/extensions/kafka)

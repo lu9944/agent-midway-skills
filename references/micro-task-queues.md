@@ -91,4 +91,8 @@ export class ReportService {
 
 For distributed single-execution cron across cluster instances, prefer BullMQ's `repeat` over the per-process `@midwayjs/cron` jobs.
 
-Reference: [Midway BullMQ](https://midwayjs.org/docs/extensions/bullmq)
+### Legacy Bull & Bull Board (migration note)
+
+v4 still ships `@midwayjs/bull` (the v3 processor API: `@Processor('queue')` + `bullFramework.getQueue().addJobToQueue()`) and `@midwayjs/bull-board` (a UI dashboard registered as a koa/express middleware — import the component in `imports` and visit `basePath`, default `/ui`; it supports both `BullAdapter` and `BullMQAdapter`). **New code should use `@midwayjs/bullmq`** — BullMQ is the supported successor. Migrate legacy processors by swapping the import (`@midwayjs/bull` → `@midwayjs/bullmq`) and job-options keys (Bull's `repeat` options become BullMQ's `repeat: { pattern }`).
+
+Reference: [Midway BullMQ](https://midwayjs.org/docs/extensions/bullmq), [Legacy Bull](https://midwayjs.org/docs/extensions/bull)

@@ -54,6 +54,6 @@ export class DatabaseService {
 }
 ```
 
-The same rule applies to `@Config(...)`, `@Logger(...)`, and `@App()` — none are available in the constructor. Use `@Init()` (only one per class, always async) and pair cleanup with `@Destroy()`.
+The same rule applies to `@Config(...)`, `@Logger(...)`, and `@MainApp()` (the v4 replacement for the empty `@App()` form) — none are available in the constructor. Use `@Init()` (only one per class, always async) and pair cleanup with `@Destroy()`.
 
 Reference: [Midway Lifecycle](https://midwayjs.org/docs/lifecycle)
